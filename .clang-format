@@ -1,0 +1,45 @@
+# Use an existing style as a base
+BasedOnStyle: LLVM
+
+# Align function declarations to have a consistent indentation style
+AlignAfterOpenBracket: Align
+AlignOperands: true
+AlignTrailingComments: true
+
+# Control the formatting of braces
+BraceWrapping:
+  AfterClass: false
+  AfterControlStatement: false
+  AfterEnum: false
+  AfterFunction: false
+  AfterNamespace: false
+  AfterStruct: false
+  AfterUnion: false
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+
+# Indentation rules
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+
+# Control how function and method declarations look
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakBeforeMultilineStrings: false
+
+# Column limit for wrapping lines
+ColumnLimit: 100
+
+# How to break constructor initializers (colon aligned for readability)
+BreakConstructorInitializers: BeforeColon
+ConstructorInitializerIndentWidth: 4
+
+# Control the placement of includes
+IncludeBlocks: Preserve
+SortIncludes: true
+
+# Pointer and reference formatting
+PointerAlignment: Left
