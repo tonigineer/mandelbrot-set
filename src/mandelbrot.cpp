@@ -8,10 +8,48 @@ Mandelbrot::Mandelbrot(const uint32_t screen_width, const uint32_t screen_height
 };
 
 void Mandelbrot::update() {
-    // for (int i = 0; i < image_width * image_height; i++)
-    //     iterations[&i] = 255;
-};
+    // Determine the real (x) and imag(y) values based on the center coordinate
+    // and magnification. The delta values are used to iterate over all pixel and
+    // simply add the delta.
+    _real_start = -2 / magnification + center_point.real;
+    _imag_start = +2 / magnification * screen_height / screen_width + center_point.imag;
+    _delta_real = +4 / magnification / screen_width;
+    _delta_imag = -4 / magnification / screen_width;
 
+    double long c_real, c_imag, z_real, z_imag, t_real, t_imag;
+
+    for (uint16_t y = 0; y < screen_height; y++) {
+        c_imag = _imag_start + _delta_imag * y;
+
+        for (uint16_t x = 0; x < screen_width; x++) {
+            z_real = 0;
+            z_imag = 0;
+
+            c_real = _real_start + _delta_real * x;
+
+            uint16_t n_iter = 0;
+
+            while (n_iter < 250) {
+                t_real = z_real * z_real - z_imag * z_imag + c_real;
+                t_imag = z_real * z_imag * 2.0 + c_imag;
+                z_real = t_real;
+                z_imag = t_imag;
+                n_iter++;
+
+                if ((z_real * z_real + z_imag * z_imag) >= 128.0)
+                    break;
+            }
+
+            iterations[x * y] = n_iter;
+        }
+    }
+}
+
+uint16_t Mandelbrot::determine_iterations(Complex point) {
+    return point.real * point.imag * 0;
+}
+
+Complex Mandelbrot::transform_pixel_to_complex(uint16_t pixel_x, uint16_t pixel_y) {}
 // #include <iostream>
 // #include <SFML/Graphics.hpp>
 // #include <cmath>
@@ -22,15 +60,15 @@ void Mandelbrot::update() {
 // #include "colors.h"
 
 // void calcMandelbrotSetPart(
-//     sf::Uint8 *pixelColors, Window window, struct Center center, const long double magnification,
-//     int part, int numParts)
+//     sf::Uint8 *pixelColors, Window window, struct Center center, const long double
+//     magnification, int part, int numParts)
 // {
 //     // Pixel are incremented from left for x axis and from top for y axis
 //     // Magic numbers correspond to an initial area of x -2 to 2 and y -2 to 2
 //     long double x0 = -2 / magnification + center.x;
 //     long double y0 = 2 / magnification * window.height / window.width + center.y;
 //     long double dx = 4 / magnification / window.width;
-//     long double dy = -4 / magnification / window.width;
+//     long double dy = -4 / magnification / window.widt    long double _delta_real;h;
 
 //     long maxIterations = window.width * sqrt(magnification);
 
@@ -116,7 +154,8 @@ void Mandelbrot::update() {
 //                 // Source: https://github.com/josch/mandelbrot (Wikipedia animation)
 //                 long double r = sqrtl(zr * zr + zi * zi);
 //                 long double c = n - 1.28 + (LOG_LOG_BAILOUT - logl(logl(r))) * Q1_LOG_2;
-//                 int idx = fmodl((logl(c / 64 + 1) / LOG_2 + 0.45), 1) * GRADIENT_LENGTH + 0.5;
+//                 int idx = fmodl((logl(c / 64 + 1) / LOG_2 + 0.45), 1) * GRADIENT_LENGTH +
+//                 0.5;
 
 //                 pixelColors[pixel++] = colors[idx][0];
 //                 pixelColors[pixel++] = colors[idx][1];

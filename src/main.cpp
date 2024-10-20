@@ -23,7 +23,7 @@ int main(void) {
 
     while (window.isOpen()) {
         event_handler.check(window);
-        // mandelbrot.update();
+        mandelbrot.update();
         renderer.update(window);
     }
 

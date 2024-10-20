@@ -32,12 +32,13 @@ void Renderer::update(sf::RenderWindow& window) {
     window.display();
 }
 
-void Renderer::_update_screen_pixel() {
-    for (uint32_t i = 0; i < screen_width * screen_height * RGBA_SIZE; i += RGBA_SIZE) {
-        pixels[i + 0] = 200;
-        pixels[i + 1] = 50;
-        pixels[i + 2] = 150;
-        pixels[i + 3] = 255;
+void Renderer::_update_screen_pixel(uint16_t& iterations) {
+    size_t n_pixel = 0;
+    for (uint32_t i = 0; i < screen_width * screen_height; i++) {
+        pixels[n_pixel++] = iterations[&i];
+        pixels[n_pixel++] = 0;
+        pixels[n_pixel++] = 0;
+        pixels[n_pixel++] = 255;
     }
 }
 
