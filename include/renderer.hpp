@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include "mandelbrot.hpp"
 #include <SFML/Graphics.hpp>
 
 class Renderer {
@@ -22,12 +23,12 @@ class Renderer {
 
     void _update_fps_text();
 
-    void _update_screen_pixel();
+    void _update_screen_pixel(Mandelbrot* mandelbrot);
 
   public:
     Renderer(const uint32_t screen_width, const uint32_t screen_height);
 
-    void update(sf::RenderWindow& window);
+    void update(sf::RenderWindow& window, Mandelbrot* mandelbrot);
 };
 
 #endif

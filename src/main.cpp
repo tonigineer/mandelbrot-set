@@ -7,9 +7,9 @@
 
 std::string WINDOW_NAME = "Mandelbrot";
 
-const uint32_t SCREEN_WIDTH = 800;
-const uint32_t SCREEN_HEIGHT = 640;
-const uint16_t MAX_FPS = 144;
+const uint32_t SCREEN_WIDTH = 1280;
+const uint32_t SCREEN_HEIGHT = 760;
+const uint16_t MAX_FPS = -144;
 
 int main(void) {
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), WINDOW_NAME);
@@ -24,7 +24,7 @@ int main(void) {
     while (window.isOpen()) {
         event_handler.check(window);
         mandelbrot.update();
-        renderer.update(window);
+        renderer.update(window, &mandelbrot);
     }
 
     return 0;

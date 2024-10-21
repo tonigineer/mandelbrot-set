@@ -1,55 +1,99 @@
 #include "mandelbrot.hpp"
 #include <SFML/Graphics.hpp>
+#include <chrono>
+#include <cmath>
+#include <future>
+#include <iostream>
 
 Mandelbrot::Mandelbrot(const uint32_t screen_width, const uint32_t screen_height)
     : screen_width(screen_width), screen_height(screen_height) {
 
     iterations = new uint16_t[screen_width * screen_height];
+    real_parts = new long double[screen_width * screen_height];
+    imag_parts = new long double[screen_width * screen_height];
 };
 
 void Mandelbrot::update() {
     // Determine the real (x) and imag(y) values based on the center coordinate
     // and magnification. The delta values are used to iterate over all pixel and
     // simply add the delta.
-    _real_start = -2 / magnification + center_point.real;
-    _imag_start = +2 / magnification * screen_height / screen_width + center_point.imag;
-    _delta_real = +4 / magnification / screen_width;
-    _delta_imag = -4 / magnification / screen_width;
+    const long double ld_magnification = (long double)magnification;
+    _real_start = -2.0 / ld_magnification + center_point.real;
+    _imag_start = 2.0 / ld_magnification * screen_height / screen_width + center_point.imag;
+    _delta_real = 4.0 / ld_magnification / screen_width;
+    _delta_imag = -4.0 / ld_magnification / screen_width;
 
-    double long c_real, c_imag, z_real, z_imag, t_real, t_imag;
+    // std::cout << _real_start << " " << _imag_start << " " << _delta_real << " " << _delta_imag
+    //           << "\n";
 
-    for (uint16_t y = 0; y < screen_height; y++) {
-        c_imag = _imag_start + _delta_imag * y;
+    // long n_iter_max = screen_width * sqrt(magnification);
 
-        for (uint16_t x = 0; x < screen_width; x++) {
-            z_real = 0;
-            z_imag = 0;
+    unsigned int num_threads = std::thread::hardware_concurrency();
+    if (num_threads == 0)
+        num_threads = 2;
 
-            c_real = _real_start + _delta_real * x;
+    // std::cout << num_threads << "\n";
+    // num_threads = 128;
 
-            uint16_t n_iter = 0;
+    std::vector<std::future<void>> futures;
+    uint32_t rows_per_thread = screen_height / num_threads;
 
-            while (n_iter < 250) {
-                t_real = z_real * z_real - z_imag * z_imag + c_real;
-                t_imag = z_real * z_imag * 2.0 + c_imag;
-                z_real = t_real;
-                z_imag = t_imag;
-                n_iter++;
+    for (unsigned int i = 0; i < num_threads; i++) {
+        uint32_t start_y = i * rows_per_thread;
+        uint32_t end_y = (i == num_threads - 1) ? screen_height : (i + 1) * rows_per_thread;
 
-                if ((z_real * z_real + z_imag * z_imag) >= 128.0)
-                    break;
-            }
+        // Use async for each chunk
+        futures.push_back(std::async(std::launch::async, &Mandelbrot::_calculate_chunk, this, start_y, end_y));
+    }
 
-            iterations[x * y] = n_iter;
+    // Wait for all tasks to complete
+    for (auto& fut : futures) {
+        fut.get();
+    }
+
+    // for (uint32_t y = 0; y < screen_height; y++) {
+    //     for (uint32_t x = 0; x < screen_width; x++) {
+    //         // _base_calculation(x, y);
+    //         std::future<void> result = std::async(std::launch::async, &Mandelbrot::_base_calculation, this, x, y);
+    //     }
+    // }
+}
+
+void Mandelbrot::_calculate_chunk(uint32_t y_start, uint32_t y_end) {
+    for (uint32_t y = y_start; y < y_end; y++) {
+        for (uint32_t x = 0; x < screen_width; x++) {
+            _base_calculation(x, y);
         }
     }
 }
 
-uint16_t Mandelbrot::determine_iterations(Complex point) {
-    return point.real * point.imag * 0;
+void Mandelbrot::_base_calculation(uint32_t x, uint32_t y) {
+    long double c_real, c_imag, z_real, z_imag, t_real, t_imag;
+
+    uint16_t n_iter = 0;
+    z_real = 0;
+    z_imag = 0;
+
+    c_imag = _imag_start + _delta_imag * y;
+    c_real = _real_start + _delta_real * x;
+
+    while (n_iter < 800) {
+        t_real = z_real * z_real - z_imag * z_imag + c_real;
+        t_imag = z_real * z_imag * 2.0 + c_imag;
+        z_real = t_real;
+        z_imag = t_imag;
+        n_iter++;
+
+        if ((z_real * z_real + z_imag * z_imag) >= 128.0)
+            break;
+    }
+
+    iterations[y * screen_width + x] = n_iter;
+    real_parts[y * screen_width + x] = z_real;
+    imag_parts[y * screen_width + x] = z_imag;
 }
 
-Complex Mandelbrot::transform_pixel_to_complex(uint16_t pixel_x, uint16_t pixel_y) {}
+// Complex Mandelbrot::transform_pixel_to_complex(uint16_t pixel_x, uint16_t pixel_y) {}
 // #include <iostream>
 // #include <SFML/Graphics.hpp>
 // #include <cmath>

@@ -25,12 +25,16 @@ class Mandelbrot {
     long double _delta_real;
     long double _delta_imag;
 
-    uint16_t determine_iterations(Complex point);
-
-    Complex transform_pixel_to_complex(uint16_t pixel_x, uint16_t pixel_y);
+    // Complex transform_pixel_to_complex(uint16_t pixel_x, uint16_t pixel_y);
 
   public:
+    void _base_calculation(uint32_t x, uint32_t y);
+
+    void _calculate_chunk(uint32_t y_start, uint32_t y_end);
+
     uint16_t* iterations;
+    long double* real_parts;
+    long double* imag_parts;
 
     Mandelbrot(const uint32_t screen_width, const uint32_t screen_height);
 

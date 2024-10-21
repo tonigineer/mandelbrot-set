@@ -31,7 +31,7 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: false
 
 # Column limit for wrapping lines
-ColumnLimit: 100
+ColumnLimit: 120
 
 # How to break constructor initializers (colon aligned for readability)
 BreakConstructorInitializers: BeforeColon
