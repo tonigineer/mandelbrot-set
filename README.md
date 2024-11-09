@@ -4,7 +4,7 @@ This project provides a simple visualization of the [Mandelbrot set](https://en.
 
 <div style="display: flex; justify-content: center; gap: 10px;">
     <kbd><img src="assets/preview-interactive.png" alt="Preview of interactive window" style="width: 300px"/></kbd>
-    <kbd><img src="assets/region-9.gif" alt="Animation of Region 9" style="width: 300px"/></kbd>
+    <kbd><img src="assets/region-9.gif" alt="Animation of Region 9" style="width: 325px"/></kbd>
 </div>
 
 ## Build
