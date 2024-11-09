@@ -1,2 +1,6 @@
-.vscode
 build/
+bin/
+
+rendered_images/
+gif_frames/
+gifs/

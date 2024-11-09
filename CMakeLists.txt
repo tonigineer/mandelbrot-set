@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.25)
 
 project(
     Mandelbrot
-    VERSION 0.0.1
+    VERSION 0.0.2
     LANGUAGES CXX)
 
 message(STATUS "Project: ${PROJECT_NAME} ${PROJECT_VERSION}")
@@ -38,3 +38,13 @@ set_property(
     TARGET
     ${PROJECT_NAME}
     PROPERTY CXX_STANDARD 20)
+
+set(BIN_DIR "${CMAKE_SOURCE_DIR}/bin")
+file(MAKE_DIRECTORY "${BIN_DIR}")
+
+add_custom_command(
+    TARGET ${PROJECT_NAME}
+    POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:${PROJECT_NAME}> "${BIN_DIR}/"
+    COMMENT "Copying MyExecutable to ${BIN_DIR}"
+)
