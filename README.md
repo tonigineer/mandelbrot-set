@@ -43,12 +43,10 @@ Key | Function
 <kbd>R</kbd> | Reset magnification to 1.0
 <kbd>A</kbd> | Decrease maximum number of iterations
 <kbd>D</kbd> | Increase maximum number of iterations
-| 
 <kbd>H</kbd> | Move view left
 <kbd>J</kbd> | Move view down
 <kbd>K</kbd> | Move view up
 <kbd>L</kbd> | Move view right
-|
 <kbd>Q</kbd> | Go to the previous region of interest
 <kbd>E</kbd> | Go to the next region of interest
 <kbd>ESC</kbd> | Exit the program
@@ -57,14 +55,14 @@ Key | Function
 
 To generate animations, use the provided [create_gif.sh](create_gif.sh) script. This script captures frames as the zoom or movement progresses and compiles them into a GIF, visualizing a zoom-in or pan across the Mandelbrot set.
 
-<div style="display: flex; justify-content: center; gap: 10px;">
+<p><div style="display: flex; justify-content: center; gap: 10px;">
     <kbd><img src="assets/region-7.gif" alt="Animation of Region 7" style="width: 300px"/></kbd>
     <kbd><img src="assets/region-9.gif" alt="Animation of Region 9" style="width: 300px"/></kbd>
 </div>
 <div style="display: flex; justify-content: center; gap: 10px;">
     <kbd><img src="assets/region-14.gif" alt="Animation of Region 14" style="width: 300px"/></kbd>
     <kbd><img src="assets/region-15.gif" alt="Animation of Region 15" style="width: 300px"/></kbd>
-</div>
+</div></p>
 
 Ensure you have `ImageMagick` installed for GIF creation. On Arch-based systems, install it with:
 
